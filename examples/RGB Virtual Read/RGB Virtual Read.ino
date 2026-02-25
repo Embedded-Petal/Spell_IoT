@@ -10,45 +10,46 @@
   *************************************************************/
 
 /* Fill-in information from SPELLIoT Device Info here */
-  #include <Spell_IoT.h>
+#include <Spell_IoT.h>
+#include <FastLED.h>
 
-  #define WIFI_SSID "************"
-  #define WIFI_PASSWORD "*************"
-  #define DEVICE_TOKEN "**********************"
+#define WIFI_SSID "*************"
+#define WIFI_PASSWORD "*******************"
+#define DEVICE_TOKEN "******************************"
 
-  #define Button4 36
-  #define Button3 39
-  #define Button2 34
-  #define Button1 35
+#define LED_PIN 32
+#define NUM_LEDS 8
+CRGB leds[NUM_LEDS];
 
-  void setup() {
-    Serial.begin(115200);
-    pinMode(Button1, INPUT);
-    pinMode(Button2, INPUT);
-    pinMode(Button3, INPUT);
-    pinMode(Button4, INPUT);
-    Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
+// RGB CACHE
+int r = 0, g = 0, b = 0;
+
+
+void rgb()
+{
+  auto c = Spell_iot.readRGB("V13");
+  // Only update if changed
+  if (c.r != r || c.g != g || c.b != b) {
+    r = c.r;
+    g = c.g;
+    b = c.b;
+    Serial.printf("RGB => %d, %d, %d\n", r, g, b);
+    for (int i = 0; i < NUM_LEDS; i++) {
+      leds[i] = CRGB(r, g, b); // Set the LED color using HSV (Hue, Saturation, Brightness)
+    }
+    FastLED.show();  // Update the LED strip
+    delay(50);
   }
+}
 
-  void loop() {
-    Spell_iot.loop();
-    if (digitalRead(Button1) == 0)
-      Spell_iot.write("V0", 1);
-    else
-      Spell_iot.write("V0", 0);
+void setup() {
+  Serial.begin(115200);
+  // Initialize the RGB LED strip
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
+}
 
-    if (digitalRead(Button2) == 0)
-      Spell_iot.write("V1", 1);
-    else
-      Spell_iot.write("V1", 0);
-
-    if (digitalRead(Button3) == 0)
-      Spell_iot.write("V2", 1);
-    else
-      Spell_iot.write("V2", 0);
-
-    if (digitalRead(Button4) == 0)
-      Spell_iot.write("V3", 1);
-    else
-      Spell_iot.write("V3", 0);
-  }
+void loop() {
+  Spell_iot.loop();
+  rgb();
+}
