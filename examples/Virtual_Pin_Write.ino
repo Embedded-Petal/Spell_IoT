@@ -6,6 +6,7 @@
    - Decide how to connect to SPELLIOT
      (Ethernet, Wi-Fi )
   Code Developed By : M.Karthickraja
+  Date : 25-02-2026
   *************************************************************/
 
 /* Fill-in information from SPELLIoT Device Info here */
