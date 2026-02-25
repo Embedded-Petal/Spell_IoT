@@ -1,0 +1,33 @@
+/*************************************************************
+
+  You’ll need:
+   - Spell IoT app (download from App Store or Google Play)
+   - ESP32/ESP8266 board
+   - Decide how to connect to SPELLIOT
+     (Ethernet, Wi-Fi )
+  Code Developed By : M.Karthickraja
+  *************************************************************/
+
+/* Fill-in information from SPELLIoT Device Info here */
+#include <Spell_IoT.h>
+
+#define WIFI_SSID     "**************"
+#define WIFI_PASSWORD  "**************"
+#define DEVICE_TOKEN  "*******************"
+
+#define button 16
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(button , INPUT);
+  Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
+}
+
+void loop() {
+  Spell_iot.loop();
+  if (digitalRead(button) == 1)
+  {
+    Spell_iot.write("V4", 1);
+    
+  }
+}
