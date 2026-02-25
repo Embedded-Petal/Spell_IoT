@@ -24,7 +24,7 @@ void setup() {
   pinMode(LED1, OUTPUT);
   digitalWrite(LED1, LOW);
   Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
-  Spell_iot.registerPin("R0", [](String v) {
+  Spell_iot.registerPin("V0", [](String v) {
     LEDState1 = v.toInt();
   });
 }
