@@ -1,0 +1,9 @@
+Spelliot        KEYWORD1
+SPELLIOT        KEYWORD1
+SpellIoT        KEYWORD1
+Petal           KEYWORD1
+pushPin         KEYWORD2
+readPin         KEYWORD2
+getRGB          KEYWORD2 
+IoTCloud        KEYWORD2
+IoT             KEYWORD2
