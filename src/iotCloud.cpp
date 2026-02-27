@@ -1,5 +1,5 @@
 #include "WiFiType.h"
-#include "iotcloud.h"
+#include "iotCloud.h"
 
 String WS_HOST = "192.168.1.39";  //  ;"api.iotcloud.petalred.com"
 uint16_t WS_PORT = 8080;
@@ -353,3 +353,4 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
       }
   }
 }
+
