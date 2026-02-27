@@ -1,0 +1,40 @@
+{
+  "name": "Spell_IoT",
+  "version": "1.0.2",
+  "description": "Arduino IoT Spell Spell_IoT library for devices.",
+  "keywords": "iot, spell, embedded,Spell_IoT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Embedded-Petal/Spell_IoT.git"
+  },
+  "authors": [
+    {
+      "name": "Karthickraja",
+      "email": "https://github.com/Embedded-Petal/Spell_IoT.git",
+      "maintainer": true
+    }
+  ],
+  "frameworks": "arduino",
+  "platforms": "*",
+  "dependencies": [
+    {
+      "name": "bblanchon/ArduinoJson",
+      "version": ">=6.0.0"
+    },
+    {
+      "name": "adafruit/Adafruit GFX Library"
+    },
+    {
+      "name": "fastled/FastLED"
+    },
+    {
+      "name": "adafruit/Adafruit BusIO"
+    },
+    {
+      "name": "adafruit/Adafruit SSD1306"
+    },
+    {
+      "name": "maxint-rd/TM16xx"
+    }
+  ]
+}
