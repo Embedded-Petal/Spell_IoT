@@ -22,7 +22,8 @@
       "version": ">=6.0.0"
     },
     {
-      "name": "adafruit/Adafruit GFX Library"
+      "name": "adafruit/Adafruit GFX Library",
+      "version":">=1.12.5"
     },
     {
       "name": "fastled/FastLED"
