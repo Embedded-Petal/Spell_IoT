@@ -1,9 +1,6 @@
 #ifndef PETAL_CONFIG_H
 #define PETAL_CONFIG_H
 
-/************* SERVER CONFIG *************/
-#define PETAL_SERVER_IP   "192.168.1.39:8080" //"https://api.iotcloud.petalred.com" "http://192.168.1.26:8080"
-#define PETAL_SERVER_PORT 80
 
 /************* BOARD AUTO DETECTION *************/
 #if defined(ESP32)
@@ -31,3 +28,4 @@
 #endif
 
 #endif
+
