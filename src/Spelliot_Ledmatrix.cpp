@@ -1,5 +1,5 @@
 
-#include"PetalLedmatrix.h"
+#include "Spelliot_Ledmatrix.h"
 
 
 #define MODULE_SIZECOLUMNS 16    // number of GRD lines, will be the y-height of the display
@@ -140,16 +140,7 @@ uint8_t surprisedFace[10] = {
   0b00000000, // Row 7
 };
 
-/*uint8_t arrow[10]={
-  0,
-  0b00100000,
-  0b01100000,
-  0b11111111,
-  0b11111111,
-  0b01100000,
-  0b00100000,
-  0
-};*/
+
 uint16_t rightarrow[10]={
   0b0001000000,
   0b0011000000,
@@ -378,3 +369,4 @@ void LEDMATRIX::LedMatrixClear()
   }
  matrix->write();
 }
+
