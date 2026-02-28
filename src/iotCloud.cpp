@@ -1,13 +1,13 @@
 #include "WiFiType.h"
 #include "iotCloud.h"
 
-String WS_HOST = "192.168.1.39";  //  ;"api.iotcloud.petalred.com"
-uint16_t WS_PORT = 8080;
+String WS_HOST = "api.spelliot.com";
+uint16_t WS_PORT = 8443;
 String WS_PATH = "/ws-mobile";
 
 
 Spell_IoT Spell_iot;
-static SpellIoT *instancePtr;
+static Spell_IoT *instancePtr;
 volatile long lastStatusSend = 0;
 volatile static uint32_t lastWs = 0;
 volatile int getIntDocker;
@@ -64,7 +64,7 @@ void Spell_IoT::connectWS() {
   // Heartbeat (important for cloud)
   ws.enableHeartbeat(15000, 8000, 2);
   // STOMP event handler
-  ws.onEvent(SpellIoT::wsEvent);
+  ws.onEvent(Spell_IoT::wsEvent);
 }
 
 
@@ -145,7 +145,7 @@ bool Spell_IoT::readBool(String pin) {
   return lastValues[pin] == "1";
 }
 
-SpellIoT::RGB Spell_IoT::readRGB(String pin) {
+Spell_IoT::RGB Spell_IoT::readRGB(String pin) {
   int idx = pinIndex(pin);
   if (idx < 0 || idx >= 500) return { 0, 0, 0 };
   return _lastRGB[idx];
@@ -299,11 +299,11 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
         instancePtr->sendSTOMP(
           "CONNECT\n"
           "accept-version:1.2\n"
-          "host:192.168.1.39\n"
+          "host:api.spelliot.com\n"
           "heart-beat:10000,0000");
         break;
       }
-      // 192.168.1.26 api.iotcloud.petalred.com
+     
     case WStype_TEXT:
       {
         // CONNECTED frame
@@ -342,15 +342,7 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
         }
         break;
       }
-    case WStype_DISCONNECTED:
-      {
-        Serial.print("[WS] Disconnected! Payload: ");
-        if (payload && length > 0) {
-          for (size_t i = 0; i < length; i++) Serial.print((char)payload[i]);
-        }
-        Serial.println();
-        break;
-      }
   }
 }
+
 
