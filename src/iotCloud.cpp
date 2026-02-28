@@ -59,8 +59,7 @@ void Spell_IoT::connectWiFi() {
 
 
 void Spell_IoT::connectWS() {
-  //ws.beginSSL(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
-  ws.begin(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
+  ws.beginSSL(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
   // Heartbeat (important for cloud)
   ws.enableHeartbeat(15000, 8000, 2);
   // STOMP event handler
@@ -344,6 +343,7 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
       }
   }
 }
+
 
 
 
