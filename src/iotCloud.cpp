@@ -295,7 +295,7 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
   switch (type) {
     case WStype_CONNECTED:
       {
-        Serial.println("Petal Cloud CONNECT");
+        Serial.println("Spell-IoT Cloud CONNECTED");
         instancePtr->sendSTOMP(
           "CONNECT\n"
           "accept-version:1.2\n"
@@ -344,6 +344,7 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
       }
   }
 }
+
 
 
 
