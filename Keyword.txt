@@ -1,6 +1,7 @@
 Spelliot        KEYWORD1
 SPELLIOT        KEYWORD1
 SpellIoT        KEYWORD1
+Spell_IoT       KEYWORD1
 Petal           KEYWORD1
 pushPin         KEYWORD2
 readPin         KEYWORD2
