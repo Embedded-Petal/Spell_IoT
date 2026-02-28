@@ -10,9 +10,9 @@
   *************************************************************/
 
 /* Fill-in information from SPELLIoT Device Info here */
-#include "Spell_IoT.h"
+#include <Spell_IoT.h>
 
-#include"PetalLedmatrix.h"
+#include <Spelliot_Ledmatrix.h>
 
 #define WIFI_SSID     "**********"
 #define WIFI_PASSWORD  "***********"
@@ -20,7 +20,7 @@
 #define Din 22
 #define sck 21
 
-LEDMATRIX Petal(Din, sck);  
+LEDMATRIX display(Din, sck);  
 
 
 uint16_t width = 6;
@@ -34,14 +34,14 @@ void displayPrint()
 {
   if (len > 3)
   {
-    Petal.Ledmatrixscroll(width, spacer, text, 1);
+    display.Ledmatrixscroll(width, spacer, text, 1);
     delay(500);
-    Petal.LedMatrixClear();
+    display.LedMatrixClear();
     delay(50);
   }
   else if (len < 4 && len > 0)
   {
-    Petal.LedmatrixShow(0, 0, text, 1);
+    display.LedmatrixShow(0, 0, text, 1);
     delay(50);
   }
 
@@ -49,7 +49,7 @@ void displayPrint()
 void setup()
 {
   Serial.begin(115200);
-  Petal.Ledmatrixinit(7, 1 , 1); //1. brightness 2. Rotation 3. Mirror
+  display.Ledmatrixinit(7, 1 , 1); //1. brightness 2. Rotation 3. Mirror
   Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
   Spell_iot.registerPin(vPinRead, [] (String V)
   {
