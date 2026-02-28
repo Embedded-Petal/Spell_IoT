@@ -1,11 +1,11 @@
-#ifndef PETALLEDMATRIX_H
-#define PETALLEDMATRIX_H
+#ifndef SPELLIOT_LEDMATRIX_H
+#define SPELLIOT_LEDMATRIX_H
 
-#include<Arduino.h>
+#include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <TM1640.h>
 #include <TM16xxMatrixGFX.h>
-//#include <cstring>
+
 #include <String.h>
 #include <stdio.h>
 #define HEART 1 
@@ -39,3 +39,4 @@ class LEDMATRIX
 };
 
 #endif
+
