@@ -1,6 +1,6 @@
 {
   "name": "Spell_IoT",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Arduino IoT Spell Spell_IoT library for devices.",
   "paragraph":"Spell IoT Cloud is an open-source IoT platform for sending and receiving virtual pin data such as joystick, RGB, and map location. Includes a companion mobile app for visualization and control.",
   "keywords": "iot, spell, embedded,Spell_IoT,iotCloud",
