@@ -1,14 +1,14 @@
-#ifndef PETAL_CONFIG_H
-#define PETAL_CONFIG_H
+#ifndef SPELLIOT_CONFIG_H
+#define SPELLIOT_CONFIG_H
 
 
 /************* BOARD AUTO DETECTION *************/
 #if defined(ESP32)
-  #define PETAL_BOARD_ESP32
+  #define SPELL_IOT_BOARD_ESP32
 #elif defined(ESP8266)
-  #define PETAL_BOARD_ESP8266
+  #define SPELL_IOT_BOARD_ESP8266
 #else
-  #warning "Petal supports only ESP32 and ESP8266"
+  #warning "SPELL_IoT supports only ESP32 and ESP8266"
 #endif
 
 /************* COMMON LIBS *************/
@@ -16,16 +16,17 @@
 #include <ArduinoJson.h>
 
 /************* BOARD SPECIFIC LIBS *************/
-#ifdef PETAL_BOARD_ESP32
+#ifdef SPELL_IOT_BOARD_ESP32
   #include <WiFi.h>
   #include <HTTPClient.h>
 #endif
 
-#ifdef PETAL_BOARD_ESP8266
+#ifdef SPELL_IOT_BOARD_ESP8266
   #include <ESP8266WiFi.h>
   #include <ESP8266HTTPClient.h>
   #include <WiFiClient.h>
 #endif
 
 #endif
+
 
