@@ -2,7 +2,7 @@
 #include "iotCloud.h"
 
 String WS_HOST = "api.spelliot.com";
-uint16_t WS_PORT = 8443;
+uint16_t WS_PORT = 443;
 String WS_PATH = "/ws-mobile";
 
 
@@ -344,5 +344,6 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
       }
   }
 }
+
 
 
