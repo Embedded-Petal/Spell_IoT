@@ -1,7 +1,7 @@
 #ifndef IOTCLOUD_H
 #define IOTCLOUD_H
 
-#include "SpellIOT_Config.h"
+#include "Spelliot_Config.h"
 #include <Arduino.h>
 #include <WiFi.h>
 #include "WebSocketsClient.h"
@@ -74,4 +74,5 @@ extern Spell_IoT Spell_iot;
 
 
 #endif
+
 
