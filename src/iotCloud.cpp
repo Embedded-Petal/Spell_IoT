@@ -114,7 +114,6 @@ void Spell_IoT::loop() {
 /**************** DISPATCH ****************/
 
 void Spell_IoT::dispatchPin(String pin, String value) {
-  // if (lastValues[pin] == value) return;
   lastValues[pin] = value;
 
   if (isHexColor(value)) {
@@ -343,6 +342,7 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
       }
   }
 }
+
 
 
 
