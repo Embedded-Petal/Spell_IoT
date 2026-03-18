@@ -1,3 +1,7 @@
+#ifndef SPELLIOT_LEDMATRIX_HPP
+#define SPELLIOT_LEDMATRIX_HPP
+
+#ifdef PETALLED_MATRIX
 
 #include "Spelliot_Ledmatrix.h"
 
@@ -370,3 +374,6 @@ void LEDMATRIX::LedMatrixClear()
  matrix->write();
 }
 
+#endif
+
+#endif
