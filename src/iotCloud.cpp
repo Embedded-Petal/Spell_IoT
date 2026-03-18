@@ -1,5 +1,13 @@
+#ifndef IOTCLOUD_HPP
+#define IOTCLOUD_HPP
+
 #include "WiFiType.h"
 #include "iotCloud.h"
+
+#ifdef UPDATE_SKYLINK
+#include <Update.h>
+#include <Preferences.h>
+#endif
 
 String WS_HOST = "api.spelliot.com";
 uint16_t WS_PORT = 443;
@@ -7,6 +15,11 @@ String WS_PATH = "/ws-mobile";
 
 
 Spell_IoT Spell_iot;
+
+#ifdef UPDATE_SKYLINK
+Preferences preferences;
+#endif
+
 static Spell_IoT *instancePtr;
 volatile long lastStatusSend = 0;
 volatile static uint32_t lastWs = 0;
@@ -16,10 +29,11 @@ String airValues = "";
 
 
 void Spell_IoT::begin(String ssid, String password, String token) {
-
-  ws.dockerBegin("cloud");
-  getIntDocker = ws.dockerReadInt("update", 0);
-  ws.dockerEnd();
+  #ifdef UPDATE_SKYLINK
+    ws.dockerBegin("cloud");
+    getIntDocker = ws.dockerReadInt("update", 0);
+    ws.dockerEnd();
+  #endif
 
   instancePtr = this;
   this->ssid = ssid;
@@ -31,7 +45,7 @@ void Spell_IoT::begin(String ssid, String password, String token) {
     _lastRGB[i] = { 0, 0, 0 };
     _lastWriteString[i] = "";
   }
-
+  //Serial.begin(115200);
   connectWiFi();
   connectWS();
   uint32_t t0 = millis();
@@ -74,39 +88,38 @@ void Spell_IoT::registerPin(String pin, PinCallback cb) {
 void Spell_IoT::loop() {
   if (WiFi.status() != WL_CONNECTED)
     connectWiFi();
-
+  ws.loop();
   // Auto reconnect WS
   if (!ws.isConnected() && WiFi.status() == WL_CONNECTED) {
     static unsigned long lastTry = 0;
     if (millis() - lastTry > 3000) {
-      Serial.println("Try to reconnect");
-      ws.disconnect();
+      //Serial.println("Try to reconnect");
+      //ws.disconnect();
       connectWS();
       lastTry = millis();
     }
   } else if (ws.isConnected() && WiFi.status() == WL_CONNECTED) {
     if (millis() - lastStatusSend >= 10000) {  // 10 seconds
       writeAck("status", "Online");
-      if (getIntDocker == 1) {
-        ws.dockerBegin("cloud");
-        String getStringDocker = ws.dockerReadString("airStatus", "");
-        for (int i = 0; i < 2; i++) {
-          writeAck("airStatus", getStringDocker);
-          delay(500);
+      #ifdef UPDATE_SKYLINK
+        if (getIntDocker == 1) {
+          ws.dockerBegin("cloud");
+          String getStringDocker = ws.dockerReadString("airStatus", "");
+          for (int i = 0; i < 2; i++) {
+            writeAck("airStatus", getStringDocker);
+            delay(500);
+          }
+          ws.dockerSaveInt("update", 0);
+          ws.dockerEnd();
+          getIntDocker = 0;
         }
-        ws.dockerSaveInt("update", 0);
-        ws.dockerEnd();
-        getIntDocker = 0;
-      }
+      #endif
       lastStatusSend = millis();
     }
   }
 
-  if (WiFi.status() == WL_CONNECTED) {
-    if (millis() - lastWs >= 20) {  // 50Hz WebSocket
-      ws.loop();
-      lastWs = millis();
-    }
+ if (WiFi.status() == WL_CONNECTED) {
+    ws.loop();
   }
   yield();  // or delay(0)
 }
@@ -149,17 +162,18 @@ Spell_IoT::RGB Spell_IoT::readRGB(String pin) {
   return _lastRGB[idx];
 }
 
-void Spell_IoT::storeMemoryString(String keyss, String values) {
-  ws.dockerBegin("cloud");
-  ws.dockerSaveString(keyss.c_str(), values.c_str());
-  ws.dockerEnd();
-}
-void Spell_IoT::storeMemoryInt(String keyss, int values) {
-  ws.dockerBegin("cloud");
-  ws.dockerSaveInt(keyss.c_str(), values);
-  ws.dockerEnd();
-}
-
+#ifdef UPDATE_SKYLINK
+  void Spell_IoT::storeMemoryString(String keyss, String values) {
+    ws.dockerBegin("cloud");
+    ws.dockerSaveString(keyss.c_str(), values.c_str());
+    ws.dockerEnd();
+  }
+  void Spell_IoT::storeMemoryInt(String keyss, int values) {
+    ws.dockerBegin("cloud");
+    ws.dockerSaveInt(keyss.c_str(), values);
+    ws.dockerEnd();
+  }
+#endif
 /**************** WRITE (Unified) *************/
 
 
@@ -184,11 +198,12 @@ String Spell_IoT::urlEncode(const String &value) {
 bool Spell_IoT::writeAck(String pin, String value) {
   if (!ws.isConnected()) return false;
   int idx = pinIndex(pin);
+  String fm = SKYLINK_FIRMWARE_VERSION;
   String encodedValue = urlEncode(value);
   String msg =
     "SEND\n"
     "destination:/app/device/"
-    + instancePtr->deviceToken + "\n\n" + pin + "=" + encodedValue + '\0';
+    + instancePtr->deviceToken + "\n\n" + pin + "=" + encodedValue + "&version="+ fm +'\0';
   
   ws.sendTXT(msg);
   return true;
@@ -221,6 +236,7 @@ uint8_t Spell_IoT::hexByte(String h) {
 
 
 /*********Check For Updates********** */
+#ifdef UPDATE_SKYLINK
 void Spell_IoT::updates(String url) {
   HTTPClient http;
   http.begin(url);            // Specify the URL
@@ -230,7 +246,7 @@ void Spell_IoT::updates(String url) {
     int contentLength = http.getSize();
     bool canBegin = Update.begin(contentLength);
     if (canBegin) {
-      Serial.println("Begin OTA update...");
+      Serial.println("Begin SpellIoT Air update...");
 
       WiFiClient *client = http.getStreamPtr();
       size_t written = Update.writeStream(*client);
@@ -242,7 +258,7 @@ void Spell_IoT::updates(String url) {
       }
 
       if (Update.end()) {
-        Serial.println("OTA done!");
+        Serial.println("SpellIoT Air Update done!");
         if (Update.isFinished()) {
           Serial.println("Update successfully completed. Rebooting.");
           airValues = "Success";
@@ -264,9 +280,9 @@ void Spell_IoT::updates(String url) {
         delay(1000);
       }
     } else {
-      airValues = "Not enough space to begin OTA";
+      airValues = "Not enough space to begin SpellIoT Air Update";
       writeAck("airStatus", airValues);
-      Serial.println("Not enough space to begin OTA");
+      Serial.println("Not enough space to begin SpellIoT Air Update");
       delay(1000);
     }
   } else {
@@ -278,7 +294,7 @@ void Spell_IoT::updates(String url) {
 
   http.end();  // Close connection
 }
-
+#endif
 /**************** STOMP WS ****************/
 
 void Spell_IoT::sendSTOMP(String f) {
@@ -328,10 +344,13 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
               val.trim();
               pin.trim();
               pin.toUpperCase();
-              //Serial.println(msg);
               if (pin == "AIR") {
-                Serial.println("OTA!");
+              #ifdef UPDATE_SKYLINK
+                Serial.println("SpellIoT Air Update!");
                 instancePtr->updates(val);
+              #else
+                  Serial.println("SpellIoT Air Update Disabled");
+               #endif
               } else {
                 instancePtr->dispatchPin(pin, val);
               }
@@ -344,6 +363,8 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
 }
 
 
+
+#endif
 
 
 
