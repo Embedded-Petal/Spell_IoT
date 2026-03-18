@@ -1,6 +1,8 @@
 #ifndef SPELLIOT_LEDMATRIX_H
 #define SPELLIOT_LEDMATRIX_H
 
+#ifdef PETALLED_MATRIX
+
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <TM1640.h>
@@ -40,3 +42,4 @@ class LEDMATRIX
 
 #endif
 
+#endif
