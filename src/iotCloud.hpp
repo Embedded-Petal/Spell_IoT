@@ -80,7 +80,7 @@ void Spell_IoT::connectWiFi() {
 
 
 void Spell_IoT::connectWS() {
-   Serial.println("WS BEGIN...");
+  
   ws.beginSSL(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
   // Heartbeat (important for cloud)
   ws.enableHeartbeat(15000, 8000, 2);
