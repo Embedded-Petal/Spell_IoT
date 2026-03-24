@@ -15,17 +15,20 @@ String WS_PATH = "/ws-mobile";
 
 
 Spell_IoT Spell_iot;
-
+Ticker ticker;
 #ifdef UPDATE_SKYLINK
 Preferences preferences;
 #endif
 
-static Spell_IoT *instancePtr;
+//static Spell_IoT *instancePtr;
+static Spell_IoT *instancePtr = nullptr;
+
 volatile long lastStatusSend = 0;
 volatile static uint32_t lastWs = 0;
 volatile int getIntDocker;
 String airValues = "";
-
+bool _started = false;
+bool _inRun = false;
 
 
 void Spell_IoT::begin(String ssid, String password, String token) {
@@ -36,6 +39,7 @@ void Spell_IoT::begin(String ssid, String password, String token) {
   #endif
 
   instancePtr = this;
+
   this->ssid = ssid;
   this->password = password;
   this->deviceToken = token;
@@ -45,9 +49,10 @@ void Spell_IoT::begin(String ssid, String password, String token) {
     _lastRGB[i] = { 0, 0, 0 };
     _lastWriteString[i] = "";
   }
-  //Serial.begin(115200);
+  
   connectWiFi();
   connectWS();
+  _started = true; 
   uint32_t t0 = millis();
   while (millis() - t0 < 1000) {  // 1 second handshake window
     ws.loop();
@@ -56,12 +61,14 @@ void Spell_IoT::begin(String ssid, String password, String token) {
 }
 
 void Spell_IoT::connectWiFi() {
-  WiFi.begin(ssid.c_str(), password.c_str());
   unsigned long t = millis();
+  static bool started = false;
 
-  while (WiFi.status() != WL_CONNECTED && millis() - t < 10000) {
-    delay(200);
+  if (!started) {
+    WiFi.begin(ssid.c_str(), password.c_str());
+    started = true;
   }
+
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WiFi Connected..");
     if (!ws.isConnected()) {
@@ -73,11 +80,14 @@ void Spell_IoT::connectWiFi() {
 
 
 void Spell_IoT::connectWS() {
+   Serial.println("WS BEGIN...");
   ws.beginSSL(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
   // Heartbeat (important for cloud)
   ws.enableHeartbeat(15000, 8000, 2);
   // STOMP event handler
   ws.onEvent(Spell_IoT::wsEvent);
+  //  Background run (no loop needed)
+  ticker.attach_ms(50, tick);
 }
 
 
@@ -85,7 +95,7 @@ void Spell_IoT::registerPin(String pin, PinCallback cb) {
   callbacks[pin] = cb;
 }
 
-void Spell_IoT::loop() {
+void Spell_IoT::autoRun()  {
   if (WiFi.status() != WL_CONNECTED)
     connectWiFi();
   ws.loop();
@@ -124,6 +134,20 @@ void Spell_IoT::loop() {
   yield();  // or delay(0)
 }
 
+
+
+
+void Spell_IoT::tick() {
+    if (instancePtr != nullptr) {
+        instancePtr->autoRun();
+    }
+}
+
+void Spell_IoT::loop()
+{
+  if (WiFi.status() != WL_CONNECTED)
+    connectWiFi();
+}
 /**************** DISPATCH ****************/
 
 void Spell_IoT::dispatchPin(String pin, String value) {
