@@ -9,7 +9,7 @@
 #include <map>
 #include <functional>
 #include <Update.h>
-
+#include <Ticker.h>
 
 typedef std::function<void(String)> PinCallback;
 
@@ -26,15 +26,19 @@ class Spell_IoT {
     std::map<String, PinCallback> callbacks;
     std::map<String, String> lastValues;
 
+   
+    // Generic template (last)
     template<typename T>
     bool write(String pin, T value) {
         return writeInternal(pin, String(value));
     }
 
+
     String ssid, password, deviceToken;
 
     void begin(String ssid, String password, String token);
     void loop();
+    void autoRun();
 
     // READ
     String read(String pin);
@@ -50,11 +54,14 @@ class Spell_IoT {
     void storeMemoryInt(String keyss, int values);
 
   private:
+    
     bool writeInternal(String pin, String value);
     void dispatchPin(String pin, String value);
     void sendSTOMP(String f);
     void connectWiFi();
     void connectWS();
+    static void tick();
+    void loopInternal();
     int pinIndex(String pin);
 
     bool isHexColor(String v);
@@ -71,6 +78,7 @@ class Spell_IoT {
 };
 
 extern Spell_IoT Spell_iot;
+extern Ticker ticker;
 
 
 #endif
