@@ -39,13 +39,14 @@ class Spell_IoT {
     void begin(String ssid, String password, String token);
     void loop();
     void autoRun();
-
+    
     // READ
     String read(String pin);
     int readInt(String pin);
     bool readBool(String pin);
     RGB readRGB(String pin);
     bool writeAck(String pin, String value);
+    bool Status();
    
     // CALLBACK
     void registerPin(String pin, PinCallback cb);
