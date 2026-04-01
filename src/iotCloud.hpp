@@ -12,7 +12,7 @@
 String WS_HOST = "api.spelliot.com";
 uint16_t WS_PORT = 443;
 String WS_PATH = "/ws-mobile";
-
+int status_connected = 0;
 
 Spell_IoT Spell_iot;
 Ticker ticker;
@@ -148,6 +148,12 @@ void Spell_IoT::loop()
   if (WiFi.status() != WL_CONNECTED)
     connectWiFi();
 }
+
+bool Spell_IoT::Status()
+{
+  return status_connected;
+}
+
 /**************** DISPATCH ****************/
 
 void Spell_IoT::dispatchPin(String pin, String value) {
@@ -339,6 +345,7 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
           "accept-version:1.2\n"
           "host:api.spelliot.com\n"
           "heart-beat:10000,0000");
+        status_connected = 1;
         break;
       }
      
