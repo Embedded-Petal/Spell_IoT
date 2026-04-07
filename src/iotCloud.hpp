@@ -4,6 +4,9 @@
 #include "WiFiType.h"
 #include "iotCloud.h"
 
+#include "esp_timer.h"
+
+
 #ifdef UPDATE_SKYLINK
 #include <Update.h>
 #include <Preferences.h>
@@ -15,7 +18,9 @@ String WS_PATH = "/ws-mobile";
 int status_connected = 0;
 
 Spell_IoT Spell_iot;
-Ticker ticker;
+//Ticker ticker;
+esp_timer_handle_t autoRunTimer;
+
 #ifdef UPDATE_SKYLINK
 Preferences preferences;
 #endif
@@ -29,6 +34,13 @@ volatile int getIntDocker;
 String airValues = "";
 bool _started = false;
 bool _inRun = false;
+
+void autoRunCallback(void* arg) {
+  if (instancePtr != nullptr) {
+    instancePtr->autoRun();
+  }
+}
+
 
 
 void Spell_IoT::begin(String ssid, String password, String token) {
@@ -52,12 +64,17 @@ void Spell_IoT::begin(String ssid, String password, String token) {
   
   connectWiFi();
   connectWS();
+  
+  const esp_timer_create_args_t timer_args = {
+    .callback = &autoRunCallback,
+    .arg = NULL,
+    .dispatch_method = ESP_TIMER_TASK,
+    .name = "autoRunTimer"
+  };
+
+  esp_timer_create(&timer_args, &autoRunTimer);
+  esp_timer_start_periodic(autoRunTimer, 50000); // 50ms
   _started = true; 
-  uint32_t t0 = millis();
-  while (millis() - t0 < 1000) {  // 1 second handshake window
-    ws.loop();
-    delay(1);
-  }
 }
 
 void Spell_IoT::connectWiFi() {
@@ -80,14 +97,13 @@ void Spell_IoT::connectWiFi() {
 
 
 void Spell_IoT::connectWS() {
-  
+   Serial.println("WS BEGIN...");
   ws.beginSSL(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
   // Heartbeat (important for cloud)
   ws.enableHeartbeat(15000, 8000, 2);
   // STOMP event handler
   ws.onEvent(Spell_IoT::wsEvent);
-  //  Background run (no loop needed)
-  ticker.attach_ms(50, tick);
+  
 }
 
 
@@ -137,23 +153,12 @@ void Spell_IoT::autoRun()  {
 
 
 
-void Spell_IoT::tick() {
-    if (instancePtr != nullptr) {
-        instancePtr->autoRun();
-    }
-}
 
 void Spell_IoT::loop()
 {
   if (WiFi.status() != WL_CONNECTED)
     connectWiFi();
 }
-
-bool Spell_IoT::Status()
-{
-  return status_connected;
-}
-
 /**************** DISPATCH ****************/
 
 void Spell_IoT::dispatchPin(String pin, String value) {
@@ -245,6 +250,10 @@ bool Spell_IoT::writeInternal(String pin, String value) {
   return true;
 }
 
+bool Spell_IoT::Status()
+{
+  return status_connected;
+}
 /**************** HELPERS ****************/
 
 int Spell_IoT::pinIndex(String pin) {
