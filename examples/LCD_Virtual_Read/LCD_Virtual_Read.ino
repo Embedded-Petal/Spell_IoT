@@ -28,6 +28,8 @@ String lcdText = "";
 // ---------------- SETUP ----------------
 void setup() {
   Serial.begin(115200);
+  Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
+  delay(2000);
 
   // LCD Initialize
   lcd.begin(16, 2);
@@ -41,7 +43,7 @@ void setup() {
   lcd.clear();
 
   
-  Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
+ 
   Spell_iot.registerPin("V14", [](String V) {
   lcdText = V;
   Serial.print("Received String: ");
