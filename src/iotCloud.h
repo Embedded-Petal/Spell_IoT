@@ -79,7 +79,7 @@ class Spell_IoT {
 };
 
 extern Spell_IoT Spell_iot;
-extern Ticker ticker;
+
 
 
 #endif
