@@ -18,7 +18,6 @@ String WS_PATH = "/ws-mobile";
 int status_connected = 0;
 
 Spell_IoT Spell_iot;
-//Ticker ticker;
 esp_timer_handle_t autoRunTimer;
 
 #ifdef UPDATE_SKYLINK
@@ -78,13 +77,19 @@ void Spell_IoT::begin(String ssid, String password, String token) {
 }
 
 void Spell_IoT::connectWiFi() {
-  unsigned long t = millis();
   static bool started = false;
-
-  if (!started) {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Connecting to WiFi...");
+   
+    WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
-    started = true;
-  }
+ 
+    int retry = 0;
+    while (WiFi.status() != WL_CONNECTED && retry < 20) {
+      delay(500);
+      Serial.print(".");
+      retry++;
+    }
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WiFi Connected..");
@@ -92,12 +97,15 @@ void Spell_IoT::connectWiFi() {
       connectWS();
     }
   }
+  else {
+      Serial.println("WiFi Failed!");
+    }  
 }
 
 
 
 void Spell_IoT::connectWS() {
-   Serial.println("WS BEGIN...");
+  Serial.println("WS BEGIN...");
   ws.beginSSL(WS_HOST.c_str(), WS_PORT, WS_PATH.c_str());
   // Heartbeat (important for cloud)
   ws.enableHeartbeat(15000, 8000, 2);
