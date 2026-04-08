@@ -9,7 +9,7 @@
 #include <map>
 #include <functional>
 #include <Update.h>
-#include <Ticker.h>
+
 
 typedef std::function<void(String)> PinCallback;
 
