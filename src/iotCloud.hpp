@@ -90,7 +90,7 @@ void Spell_IoT::connectWiFi() {
       Serial.print(".");
       retry++;
     }
-
+  }
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WiFi Connected..");
     if (!ws.isConnected()) {
