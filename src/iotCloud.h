@@ -53,6 +53,7 @@ class Spell_IoT {
     void writeRawWS(String pin, String value);
     void storeMemoryString(String keyss, String values);
     void storeMemoryInt(String keyss, int values);
+    void updates(String url);
 
   private:
     
@@ -74,7 +75,7 @@ class Spell_IoT {
     String _lastWriteString[500];
     RGB _lastRGB[500];
     String urlEncode(const String &value);
-    void updates(String url);
+    
     
 };
 
