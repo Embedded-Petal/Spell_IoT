@@ -5,7 +5,8 @@
    - ESP32/ESP8266 board
    - Decide how to connect to SPELLIOT
      (Ethernet, Wi-Fi )
-  Code Developed By : M.Karthickraja
+  Author: Karthickraja
+  Powered By : Petals Automations
   Date : 25-02-2026
   *************************************************************/
 
