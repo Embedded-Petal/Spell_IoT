@@ -16,7 +16,7 @@
 #include <DHT.h>
 
 #define WIFI_SSID "********"
-#define WIFI_Password "*************"
+#define WIFI_PASSWORD "*************"
 #define DEVICE_TOKEN "********************"
 
 #define DHTPIN 5
