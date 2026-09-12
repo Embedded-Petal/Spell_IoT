@@ -18,8 +18,12 @@
 #include "StepperMotor.h"
 #endif
 
+#ifdef SPELLIOT_MQTT
+#include "SpellIoT_MQTT.h"
+#else
 #include "iotCloud.h"
 #include "iotCloud.hpp"
+#endif
 
 #endif
 

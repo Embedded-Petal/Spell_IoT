@@ -22,36 +22,36 @@
 #endif
 #endif
 
-String WS_HOST = "api.spelliot.com";
-uint16_t WS_PORT = 443;
-String WS_PATH = "/ws-mobile";
-int status_connected = 0;
+inline String WS_HOST = "api.spelliot.com";
+inline uint16_t WS_PORT = 443;
+inline String WS_PATH = "/ws-mobile";
+inline int status_connected = 0;
 
-Spell_IoT Spell_iot;
+inline Spell_IoT Spell_iot;
 #if defined(SPELL_IOT_BOARD_ESP32)
-TaskHandle_t autoRunTaskHandle;
+inline TaskHandle_t autoRunTaskHandle;
 #elif defined(SPELL_IOT_BOARD_ESP8266)
-Ticker autoRunTimer;
+inline Ticker autoRunTimer;
 #endif
 
 #ifdef UPDATE_SKYLINK
 #if defined(SPELL_IOT_BOARD_ESP32)
-Preferences preferences;
+inline Preferences preferences;
 #endif
 #endif
 
 // static Spell_IoT *instancePtr;
-static Spell_IoT *instancePtr = nullptr;
+inline Spell_IoT *instancePtr = nullptr;
 
-volatile unsigned long lastStatusSend = 0;
-volatile static uint32_t lastWs = 0;
-volatile int getIntDocker;
-String airValues = "";
-bool _started = false;
-bool _inRun = false;
+inline volatile unsigned long lastStatusSend = 0;
+inline volatile uint32_t lastWs = 0;
+inline volatile int getIntDocker;
+inline String airValues = "";
+inline bool _started = false;
+inline bool _inRun = false;
 
 #if defined(UPDATE_SKYLINK) && defined(SPELL_IOT_BOARD_ESP32)
-static void updateTask(void *pvParameters) {
+inline void updateTask(void *pvParameters) {
   String *urlPtr = (String *)pvParameters;
   String url = *urlPtr;
   delete urlPtr;
@@ -64,7 +64,7 @@ static void updateTask(void *pvParameters) {
 #endif
 
 #if defined(SPELL_IOT_BOARD_ESP32)
-static void autoRunTask(void *parameter) {
+inline void autoRunTask(void *parameter) {
   while (true) {
     if (instancePtr != nullptr) {
       instancePtr->autoRun();
@@ -73,7 +73,7 @@ static void autoRunTask(void *parameter) {
   }
 }
 #elif defined(SPELL_IOT_BOARD_ESP8266)
-void autoRunCallback() {
+inline void autoRunCallback() {
   schedule_function([]() {
     if (instancePtr != nullptr) {
       instancePtr->autoRun();
@@ -82,7 +82,7 @@ void autoRunCallback() {
 }
 #endif
 
-void Spell_IoT::begin(String ssid, String password, String token) {
+inline void Spell_IoT::begin(String ssid, String password, String token) {
 #ifdef UPDATE_SKYLINK
   ws.dockerBegin("cloud");
   getIntDocker = ws.dockerReadInt("update", 0);
@@ -115,7 +115,7 @@ void Spell_IoT::begin(String ssid, String password, String token) {
   _started = true;
 }
 
-void Spell_IoT::connectWiFi() {
+inline void Spell_IoT::connectWiFi() {
   static unsigned long lastWifiTry = 0;
 
   if (WiFi.status() != WL_CONNECTED) {
@@ -143,7 +143,7 @@ void Spell_IoT::connectWiFi() {
   }
 }
 
-void Spell_IoT::connectWS() {
+inline void Spell_IoT::connectWS() {
   static bool wsInitialized = false;
   if (wsInitialized)
     return;
@@ -158,9 +158,11 @@ void Spell_IoT::connectWS() {
   Serial.println("Call WS Event");
 }
 
-void Spell_IoT::registerPin(String pin, PinCallback cb) { callbacks[pin] = cb; }
+inline void Spell_IoT::registerPin(String pin, PinCallback cb) {
+  callbacks[pin] = cb;
+}
 
-void Spell_IoT::autoRun() {
+inline void Spell_IoT::autoRun() {
   connectWiFi(); // Always call this so it can print 'WiFi Connected..' once
                  // connected
   // ws.loop(); // Commented out to prevent blocking when WiFi is disconnected
@@ -191,13 +193,13 @@ void Spell_IoT::autoRun() {
   yield(); // or delay(0)
 }
 
-void Spell_IoT::loop() {
-  if (WiFi.status() != WL_CONNECTED)
-    connectWiFi();
+inline void Spell_IoT::loop() {
+  // if (WiFi.status() != WL_CONNECTED)
+  //   connectWiFi();
 }
 /**************** DISPATCH ****************/
 
-void Spell_IoT::dispatchPin(String pin, String value) {
+inline void Spell_IoT::dispatchPin(String pin, String value) {
   lastValues[pin] = value;
 
   if (isHexColor(value)) {
@@ -217,13 +219,13 @@ void Spell_IoT::dispatchPin(String pin, String value) {
 
 /**************** READ ****************/
 
-String Spell_IoT::read(String pin) { return lastValues[pin]; }
+inline String Spell_IoT::read(String pin) { return lastValues[pin]; }
 
-int Spell_IoT::readInt(String pin) { return lastValues[pin].toInt(); }
+inline int Spell_IoT::readInt(String pin) { return lastValues[pin].toInt(); }
 
-bool Spell_IoT::readBool(String pin) { return lastValues[pin] == "1"; }
+inline bool Spell_IoT::readBool(String pin) { return lastValues[pin] == "1"; }
 
-Spell_IoT::RGB Spell_IoT::readRGB(String pin) {
+inline Spell_IoT::RGB Spell_IoT::readRGB(String pin) {
   int idx = pinIndex(pin);
   if (idx < 0 || idx >= 500)
     return {0, 0, 0};
@@ -231,12 +233,12 @@ Spell_IoT::RGB Spell_IoT::readRGB(String pin) {
 }
 
 #ifdef UPDATE_SKYLINK
-void Spell_IoT::storeMemoryString(String keyss, String values) {
+inline void Spell_IoT::storeMemoryString(String keyss, String values) {
   ws.dockerBegin("cloud");
   ws.dockerSaveString(keyss.c_str(), values.c_str());
   ws.dockerEnd();
 }
-void Spell_IoT::storeMemoryInt(String keyss, int values) {
+inline void Spell_IoT::storeMemoryInt(String keyss, int values) {
   ws.dockerBegin("cloud");
   ws.dockerSaveInt(keyss.c_str(), values);
   ws.dockerEnd();
@@ -244,7 +246,7 @@ void Spell_IoT::storeMemoryInt(String keyss, int values) {
 #endif
 /**************** WRITE (Unified) *************/
 
-String Spell_IoT::urlEncode(const String &value) {
+inline String Spell_IoT::urlEncode(const String &value) {
   String encoded = "";
   char c;
   char bufHex[4];
@@ -262,7 +264,7 @@ String Spell_IoT::urlEncode(const String &value) {
   return encoded;
 }
 
-bool Spell_IoT::writeAck(String pin, String value) {
+inline bool Spell_IoT::writeAck(String pin, String value) {
   if (!ws.isConnected())
     return false;
   int idx = pinIndex(pin);
@@ -278,20 +280,20 @@ bool Spell_IoT::writeAck(String pin, String value) {
   return true;
 }
 
-bool Spell_IoT::writeInternal(String pin, String value) {
+inline bool Spell_IoT::writeInternal(String pin, String value) {
   writeAck(pin, value);
   return true;
 }
 
-bool Spell_IoT::Status() { return status_connected; }
+inline bool Spell_IoT::Status() { return status_connected; }
 /**************** HELPERS ****************/
 
-int Spell_IoT::pinIndex(String pin) {
+inline int Spell_IoT::pinIndex(String pin) {
   pin.replace("V", "");
   return pin.toInt();
 }
 
-bool Spell_IoT::isHexColor(String v) {
+inline bool Spell_IoT::isHexColor(String v) {
   if (v.startsWith("#"))
     v = v.substring(1);
   if (v.length() != 6)
@@ -302,11 +304,13 @@ bool Spell_IoT::isHexColor(String v) {
   return true;
 }
 
-uint8_t Spell_IoT::hexByte(String h) { return strtol(h.c_str(), NULL, 16); }
+inline uint8_t Spell_IoT::hexByte(String h) {
+  return strtol(h.c_str(), NULL, 16);
+}
 
 /*********Check For Updates********** */
 #ifdef UPDATE_SKYLINK
-void Spell_IoT::updates(String url) {
+inline void Spell_IoT::updates(String url) {
   HTTPClient http;
   http.begin(url);           // Specify the URL
   int httpCode = http.GET(); // Make the request
@@ -367,13 +371,13 @@ void Spell_IoT::updates(String url) {
 #endif
 /**************** STOMP WS ****************/
 
-void Spell_IoT::sendSTOMP(String f) {
+inline void Spell_IoT::sendSTOMP(String f) {
   f += "\n\n";
   f += '\0';
   ws.sendTXT(f);
 }
 
-void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
+inline void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
   String msg = (char *)payload;
   switch (type) {
   case WStype_DISCONNECTED:
@@ -410,7 +414,11 @@ void Spell_IoT::wsEvent(WStype_t type, uint8_t *payload, size_t length) {
       if (idx > 0) {
         String body = msg.substring(idx + 2);
         size_t capacity = body.length() * 1.2 + 256;
+#if ARDUINOJSON_VERSION_MAJOR >= 7
+        JsonDocument doc;
+#else
         DynamicJsonDocument doc(capacity);
+#endif
         if (deserializeJson(doc, body) == DeserializationError::Ok) {
           String pin = doc["pin"].as<String>();
           String val = doc["value"].as<String>();

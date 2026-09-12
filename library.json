@@ -1,8 +1,8 @@
 {
   "name": "Spell_IoT",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Arduino IoT Spell Spell_IoT library for devices.",
-  "paragraph":"Spell IoT Cloud is an open-source IoT platform for sending and receiving virtual pin data such as joystick, RGB, and map location. Includes a companion mobile app for visualization and control.",
+  "paragraph": "Spell IoT Cloud is an open-source IoT platform for sending and receiving virtual pin data such as joystick, RGB, and map location. Includes a companion mobile app for visualization and control.",
   "keywords": "iot, spell, embedded,Spell_IoT,iotCloud",
   "repository": {
     "type": "git",
@@ -17,37 +17,39 @@
   ],
   "frameworks": "arduino",
   "platforms": "*",
-  "dependencies":
-  [
-      {
-          "owner": "bblanchon",
-          "name": "ArduinoJson",
-          "version": "^6.16.1"
-      },
-      {
-          "owner": "me-no-dev",
-          "name": "AsyncTCP",
-          "version": "*"
-      },
-      {
-          "owner":"adafruit",
-          "name": "Adafruit GFX Library",
-          "version": "^1.12.5"
-      },
-      {
-          "name": "fastled/FastLED",
-          "version": "*"
-      },
-      {
-        "name": "adafruit/Adafruit BusIO"
-      },
-      {
-        "name": "adafruit/Adafruit SSD1306"
-      },
-      {
-        "name": "TM16xx",
-        "version": "https://github.com/maxint-rd/TM16xx.git"
-      }
+  "dependencies": [
+    {
+      "owner": "bblanchon",
+      "name": "ArduinoJson",
+      "version": "^6.16.1"
+    },
+    {
+      "owner": "me-no-dev",
+      "name": "AsyncTCP",
+      "version": "*"
+    },
+    {
+      "owner": "adafruit",
+      "name": "Adafruit GFX Library",
+      "version": "^1.12.5"
+    },
+    {
+      "name": "fastled/FastLED",
+      "version": "*"
+    },
+    {
+      "name": "adafruit/Adafruit BusIO"
+    },
+    {
+      "name": "adafruit/Adafruit SSD1306"
+    },
+    {
+      "name": "TM16xx",
+      "version": "https://github.com/maxint-rd/TM16xx.git"
+    },
+    {
+      "name": "knolleary/PubSubClient",
+      "version": "^2.8.0"
+    }
   ]
-  
 }

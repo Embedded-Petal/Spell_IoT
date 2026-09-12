@@ -19,6 +19,7 @@
 #ifdef SPELL_IOT_BOARD_ESP32
   #include <WiFi.h>
   #include <HTTPClient.h>
+  #include <Update.h>
 #endif
 
 #ifdef SPELL_IOT_BOARD_ESP8266
