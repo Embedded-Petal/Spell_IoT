@@ -4,7 +4,6 @@ Spell_IoT is a universal IoT communication library for ESP32 and ESP8266. It sup
 
 ## Features
 - **Dual Protocols:** Built-in support for both WebSockets and MQTT.
-- **Background Processing:** Network handling runs entirely in background tasks (FreeRTOS for ESP32, Ticker for ESP8266). No need to call `loop()` manually!
 - **Universal JSON Support:** Fully compatible with both ArduinoJson Version 6 and Version 7.
 - **Easy Virtual Pins:** Simple virtual pin read & write mechanism.
 - **RGB Parsing:** Built-in RGB HEX color parsing.
@@ -49,7 +48,7 @@ void setup() {
 }
 
 void loop() {
-  // Your code here. No need to call Spell_iot.loop()!
+  Spell_iot.loop();
 }
 ```
 
@@ -79,7 +78,7 @@ void setup() {
 }
 
 void loop() {
-  // Your code here. No need to call Spell_iot.loop()!
+  Spell_iot.loop();
 }
 ```
 
