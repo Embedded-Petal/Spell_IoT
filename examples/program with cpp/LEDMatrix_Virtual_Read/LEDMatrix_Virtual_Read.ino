@@ -11,9 +11,8 @@
   *************************************************************/
 
 /* Fill-in information from SPELLIoT Device Info here */
+#define SPELLIOT_LED_DISPLAY
 #include <Spell_IoT.h>
-
-#include <Spelliot_Ledmatrix.h>
 
 #define WIFI_SSID     "**********"
 #define WIFI_PASSWORD  "***********"
@@ -65,7 +64,8 @@ void setup()
 
 void loop()
 {
-displayPrint();
+  Spell_iot.loop();
+  displayPrint();
 
 }
 
