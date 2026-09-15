@@ -28,6 +28,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 float a = analogRead(LDR);
   int percentage = (a / 4095) * 100 ;
   Spell_iot.write("V5", percentage);

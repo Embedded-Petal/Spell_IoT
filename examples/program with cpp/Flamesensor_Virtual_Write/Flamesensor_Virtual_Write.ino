@@ -29,6 +29,7 @@ void setup()
 
 void loop()
 {
+  Spell_iot.loop();
 Spell_iot.write("V0", digitalRead(FlameSensor) ? 1 : 0);
 }
 

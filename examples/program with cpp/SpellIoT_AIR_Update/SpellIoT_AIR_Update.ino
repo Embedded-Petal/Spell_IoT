@@ -22,6 +22,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 if (LEDState1 == 1 ) digitalWrite(LED1, HIGH);
   else digitalWrite(LED1, LOW);
 }  

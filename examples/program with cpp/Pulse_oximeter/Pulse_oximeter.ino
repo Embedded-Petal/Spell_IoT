@@ -92,6 +92,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
   sensor.check();
 
   readSensor();

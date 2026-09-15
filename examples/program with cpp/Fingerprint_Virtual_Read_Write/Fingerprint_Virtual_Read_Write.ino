@@ -149,6 +149,7 @@ void setup() {
 
 // === LOOP ===
 void loop() {
+  Spell_iot.loop();
 if (id > 0) {
     enrollFingerprint(id);
     Serial.println("\nEnrollment complete. Enter another ID to enroll again, or touch the sensor to verify a fingerprint.");

@@ -26,6 +26,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 if (digitalRead(button) == 1)
   {
     Spell_iot.write("V4", 1);

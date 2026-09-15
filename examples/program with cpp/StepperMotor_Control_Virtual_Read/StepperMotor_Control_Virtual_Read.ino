@@ -59,5 +59,6 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 }
 

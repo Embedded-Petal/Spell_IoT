@@ -28,6 +28,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 int a = analogRead(Potentiometer);
   Spell_iot.write("V4", a);
   Serial.println(a);

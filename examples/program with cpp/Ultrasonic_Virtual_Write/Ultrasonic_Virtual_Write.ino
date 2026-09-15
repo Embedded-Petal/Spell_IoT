@@ -60,6 +60,7 @@ void distance() {
 
 void loop()
 {
+  Spell_iot.loop();
 distance();
 }
 

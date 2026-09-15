@@ -44,6 +44,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
   // put your main code here, to run repeatedly:
   dhtRead();
 }

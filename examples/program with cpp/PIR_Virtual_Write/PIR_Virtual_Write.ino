@@ -28,6 +28,7 @@ void setup()
 
 void loop()
 {
+  Spell_iot.loop();
 int pirState = digitalRead(PIR) ;
  Spell_iot.write("V7", pirState);
  delay(10);

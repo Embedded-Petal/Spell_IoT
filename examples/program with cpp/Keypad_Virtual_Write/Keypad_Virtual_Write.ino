@@ -83,6 +83,7 @@ void setup() {
   Serial.println("* = Backspace | # = Enter");
 }
 void loop() {
+  Spell_iot.loop();
 handleKeypad();
 }
 

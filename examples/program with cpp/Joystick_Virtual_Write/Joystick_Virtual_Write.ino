@@ -36,6 +36,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 // Read analog values from the joystick
   int xValue = analogRead(JOYSTICK_X_PIN);
   int yValue = analogRead(JOYSTICK_Y_PIN);

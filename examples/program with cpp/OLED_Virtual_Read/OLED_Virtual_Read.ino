@@ -76,6 +76,7 @@ void setup() {
 
 // ---------------- LOOP ----------------
 void loop() {
+  Spell_iot.loop();
 // MUST
 }
 

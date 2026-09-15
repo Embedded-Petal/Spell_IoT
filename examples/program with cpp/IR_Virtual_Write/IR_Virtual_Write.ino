@@ -29,6 +29,7 @@ void setup() {
 }
 
 void loop() {
+  Spell_iot.loop();
 int irState = digitalRead(IR);
   if (irState != lastIr) {
     Spell_iot.write("V1", irState ? 1 : 0);
