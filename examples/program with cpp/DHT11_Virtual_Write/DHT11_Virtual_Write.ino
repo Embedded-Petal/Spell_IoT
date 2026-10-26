@@ -40,7 +40,7 @@ void setup() {
   // put your setup code here, to run once:
   dht.begin();
   Serial.begin(115200);
-  Spell_iot.begin(WIFI_SSID, WIFI_Password, DEVICE_TOKEN);
+  Spell_iot.begin(WIFI_SSID, WIFI_PASSWORD, DEVICE_TOKEN);
 }
 
 void loop() {
